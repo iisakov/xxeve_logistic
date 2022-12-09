@@ -1,0 +1,251 @@
+DROP TABLE entity_list;
+CREATE TABLE entity_list(
+    entity_code TEXT NOT NULL,
+    entity_id INTEGER NOT NULL,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL,
+    PRIMARY KEY (entity_code, entity_id));
+
+
+DROP TABLE regions;
+CREATE TABLE regions(
+    region_id INTEGER PRIMARY KEY NOT NULL,
+    name TEXT,
+    description TEXT,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE constellations;
+CREATE TABLE constellations(
+    constellation_id INTEGER PRIMARY KEY NOT NULL, 
+    region_id INTEGER NOT NULL,
+    name TEXT, 
+    position_x REAL NOT NULL, 
+    position_y REAL NOT NULL, 
+    position_z REAL NOT NULL, 
+    create_date TIMESTAMP NOT NULL, 
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE systems;
+CREATE TABLE systems(
+    system_id INTEGER PRIMARY KEY NOT NULL,
+    constellation_id INTEGER NOT NULL,
+    name TEXT, security_status REAL NOT NULL,
+    security_class TEXT,
+    radius REAL,
+    position_x REAL NOT NULL,
+    position_y REAL NOT NULL,
+    position_z REAL NOT NULL,
+    regional INTEGER,
+    solar_system_name_id INTEGER,
+    hub INTEGER,
+    fringe INTEGER,
+    corridor INTEGER,
+    sun_type_id INTEGER,
+    wormhole_class_id INTEGER,
+    international INTEGER,
+    luminosity REAL,
+    stargates_number INTEGER,
+    planets_number INTEGER,
+    create_date TEXT NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE market_groups;
+CREATE TABLE market_groups(
+    market_group_id INTEGER PRIMARY KEY NOT NULL,
+    description TEXT,
+    name TEXT,
+    parent_group_id INTEGER,
+    hasTypes TEXT,
+    icon_id INTEGER,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE categories;
+CREATE TABLE categories(
+    category_id INTEGER PRIMARY KEY NOT NULL,
+    name TEXT,
+    published TEXT,
+    icon_id INTEGER,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE groups;
+CREATE TABLE groups(
+    group_id INTEGER PRIMARY KEY NOT NULL, 
+    category_id INTEGER NOT NULL,
+    name TEXT, useBasePrice INTEGER, 
+    anchorable INTEGER, 
+    anchored INTEGER, 
+    published INTEGER, 
+    fittableNonSingleton INTEGER, 
+    icon_id INTEGER, 
+    create_date TIMESTAMP NOT NULL, 
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE types;
+CREATE TABLE types(
+    type_id TEXT PRIMARY KEY NOT NULL,
+    market_group_id TEXT,
+    group_id TEXT NOT NULL,
+    name TEXT,
+    volume REAL,
+    portion_size TEXT,
+    mass TEXT,
+    description TEXT,
+    capacity TEXT,
+    icon_id TEXT,
+    radius REAL, 
+    sof_material_set_id TEXT, 
+    race_id TEXT, 
+    variation_parent_type_id TEXT, 
+    meta_group_id TEXT, 
+    published TEXT, 
+    base_price REAL, 
+    graphic_id TEXT, 
+    sof_faction_name TEXT, 
+    sound_id TEXT, 
+    faction_id TEXT, 
+    masteries TEXT, 
+    create_date TIMESTAMP NOT NULL, 
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE snap_statistic_systems;
+CREATE TABLE snap_statistic_systems(
+    system_id INTEGER NOT NULL,
+    snap_id INTEGER NOT NULL,
+    ship_jumps INTEGER NOT NULL,
+    npc_kills INTEGER NOT NULL,
+    pod_kills INTEGER NOT NULL,
+    ship_kills INTEGER NOT NULL,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL,
+    PRIMARY KEY (system_id, snap_id));
+
+
+DROP TABLE corporations;
+CREATE TABLE corporations(
+    corporation_id INTEGER PRIMARY KEY,
+    alliance_id INTEGER,
+    name TEXT NOT NULL,
+    ticker TEXT,
+    ceo_id INTEGER NOT NULL,
+    creator_id INTEGER NOT NULL,
+    date_founded TEXT,
+    description TEXT,
+    home_station_id INTEGER,
+    member_count INTEGER NOT NULL,
+    shares BIGINT,
+    tax_rate INTEGER,
+    url TEXT,
+    war_eligible INTEGER,
+    is_dangerous INTEGER NOT NULL DEFAULT 0,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE alliances;
+CREATE TABLE alliances(
+    alliance_id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    ticker TEXT,
+    creator_corporation_id INTEGER NOT NULL,
+    creator_id INTEGER NOT NULL,
+    date_founded TEXT NOT NULL,
+    description TEXT,
+    executor_corporation_id INTEGER NOT NULL,
+    create_date TEXT NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE killmails;
+CREATE TABLE killmails(
+    killmail_id INTEGER PRIMARY KEY NOT NULL,
+    location_id INTEGER NOT NULL,
+    fitted_value REAL NOT NULL,
+    dropped_value REAL NOT NULL,
+    destroyed_value REAL NOT NULL,
+    total_value REAL NOT NULL,
+    points INTEGER NOT NULL,
+    npc INTEGER NOT NULL,
+    solo INTEGER NOT NULL,
+    awox INTEGER NOT NULL,
+    killmail_time TIMESTAMP NOT NULL,
+    system_id INTEGER NOT NULL,
+    system_name TEXT NOT NULL,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE characters;
+CREATE TABLE characters(
+    character_id INTEGER PRIMARY KEY,
+    birthday TEXT, name TEXT,
+    alliance_id INTEGER,
+    alliance_name TEXT,
+    corporation_id INTEGER,
+    corporation_name TEXT,
+    security_status REAL NOT NULL,
+    bloodline_id INTEGER,
+    description TEXT,
+    title TEXT,
+    is_dangerous INTEGER NOT NULL DEFAULT 0,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL);
+
+
+DROP TABLE alliances_corporations;
+CREATE TABLE alliances_corporations(
+    alliance_id INTEGER,
+    corporation_id INTEGER,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL,
+    PRIMARY KEY (alliance_id, corporation_id));
+
+
+DROP TABLE attackers;
+CREATE TABLE attackers(
+    attacker_id INTEGER NOT NULL,
+    killmail_id INTEGER,
+    attacker_alliance_id INTEGER,
+    attacker_alliance_name TEXT,
+    attacker_character_id INTEGER,
+    attacker_corporation_id INTEGER,
+    attacker_corporation_name TEXT,
+    attacker_damage_done INTEGER,
+    attacker_final_blow INTEGER,
+    attacker_security_status INTEGER NOT NULL,
+    attacker_ship_id INTEGER,
+    attacker_ship_name TEXT,
+    attacker_weapon_type_id INTEGER,
+    attacker_weapon_name TEXT,
+    create_date TIMESTAMP NOT NULL,
+    create_by TEXT NOT NULL,
+    PRIMARY KEY (attacker_id, killmail_id));
+    
+
+DROP TABLE victims;
+CREATE TABLE victims(
+    victim_id INTEGER NOT NULL, 
+    killmail_id BIGINT,
+    victim_alliance_id INTEGER, 
+    victim_alliance_name TEXT, 
+    victim_corporation_id INTEGER, 
+    victim_corporation_name TEXT, 
+    victim_character_id INTEGER, 
+    victim_damage_taken INTEGER, 
+    victim_position_x REAL NOT NULL, 
+    victim_position_y REAL NOT NULL, 
+    victim_position_z REAL NOT NULL, 
+    victim_ship_id INTEGER, 
+    victim_ship_name TEXT, 
+    create_date TIMESTAMP NOT NULL, 
+    create_by TEXT NOT NULL, 
+    PRIMARY KEY (victim_id, killmail_id));
